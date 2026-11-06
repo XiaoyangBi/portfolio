@@ -4,7 +4,7 @@
   [OUTPUT]: CosmoProjects 页面组件（路由 /projects）
   [POS]: themes/cosmo/views 的作品索引。一次取回全部公开作品，在前端按分类筛选，计数由同一份列表算出。
          当前分类写入 ?category=，链接可分享；空分类不显示，避免出现「0 件」的按钮。
-         页头下方的置顶入口区把全部真实外链摊开：已开源、已部署可访问、源码包，按可直接体验的优先排序。
+         页头下方的置顶入口区把全部真实外链摊开。Personal Agent 主线的作品优先，其余按「可体验 → 可看源码 → 可下载」排序。
          入口与徽标都从 links 派生；没有可公开入口的作品不会出现在这里。
   [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
 -->
@@ -41,16 +41,21 @@ const counts = computed(() => ({
   download: all.value.filter((item) => hasKind(item, 'download')).length,
 }))
 
+/** Personal Agent 主线的作品优先露出入口 */
+const SPOTLIGHT = new Set(['personal-agent-benchmark', 'personal-memory', 'second-brain', 'reading-coach'])
+const spotlight = (slug: string) => (SPOTLIGHT.has(slug) ? 0 : 1)
+
 const RANK: Record<LinkKind, number> = { demo: 0, source: 1, download: 2 }
 const launchpad = computed(() => all.value
   .flatMap((project) => classifyLinks(project).map((item) => ({
     key: `${project.uuid}:${item.link.url}`,
+    slug: project.uuid,
     title: project.title,
     label: item.label,
     kind: item.kind,
     url: item.link.url,
   })))
-  .sort((a, b) => RANK[a.kind] - RANK[b.kind]))
+  .sort((a, b) => spotlight(a.slug) - spotlight(b.slug) || RANK[a.kind] - RANK[b.kind]))
 
 function pick(slug: string) {
   void router.replace({ query: slug && slug !== active.value ? { category: slug } : {} })
@@ -72,7 +77,6 @@ useMeta({
     <section v-if="launchpad.length" class="cz-launchpad" aria-label="开源与在线入口">
       <div class="cz-launchpad__intro">
         <p class="cz-eyebrow">OPEN SOURCE · LIVE · DOWNLOAD</p>
-        <h2 class="cz-serif">别只看截图，直接点开</h2>
         <p class="cz-launchpad__lead">{{ counts.source }} 件已开源，{{ counts.demo }} 件已部署可直接访问，{{ counts.download }} 件提供源码包下载。</p>
       </div>
       <ul class="cz-launchpad__grid">

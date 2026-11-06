@@ -40,7 +40,7 @@ demos/DraftDemo.vue: 03 留给人，口述 → AI 草稿，「值不值」留给
 demos/SearchDemo.vue: 04 有出处（夜间），搜索「出处」浮现五条决策；作品数由 props total 计算
 demos/LoopDemo.vue: 05 回流，六步流水线 + 预测分与实际曝光读数
 views/CosmoHome.vue: 首页，序章 + 五章 + 精选作品 + 结语
-views/CosmoProjects.vue: 作品索引，前端按分类筛选，状态写入 ?category=
+views/CosmoProjects.vue: 作品索引，前端按分类筛选，状态写入 ?category=。页头下有置顶入口区，Personal Agent 主线的作品优先（SPOTLIGHT 列表），其余按入口类型排序
 views/CosmoCase.vue: 案例页，四段式 01 问题 → 02 决策 → 03 我做了什么 → 04 证据 + 复盘 + 上下篇；空段落不占编号
 views/CosmoAbout.vue: 关于页，关注、经历、教育、荣誉、其他、联系
 views/CosmoNotFound.vue: 404
