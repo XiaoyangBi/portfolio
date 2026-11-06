@@ -1,0 +1,333 @@
+/**
+ * [INPUT]: 无运行时依赖
+ * [OUTPUT]: 导出 evidentfolio 全部领域类型：Project、ProjectSection、Asset、SiteData、Certificate 等，以及本站新增的 ProjectShowcase
+ * [POS]: 前端的数据契约，与 FastAPI 后端的响应结构一一对应。
+ *        本站只做一处扩展：Project.showcase 为可选字段，由静态数据源提供，后端不返回；主题必须容忍它缺失。
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
+export interface ApiEnvelope<T> {
+  success: boolean
+  data: T
+  message: string | null
+  request_id: string
+  error?: {
+    code: string
+    message: string
+    fields?: Array<{ field?: string; message?: string }>
+  }
+}
+
+export interface Asset {
+  version: number
+  uuid: string
+  original_name: string
+  display_name: string
+  mime_type: string
+  extension: string
+  size: number
+  sha256: string
+  category: string
+  width: number | null
+  height: number | null
+  duration: number | null
+  is_public: boolean
+  /** download：可下载；view：仅可查看（加密传输，不提供下载），仅对可预览格式生效 */
+  access_mode?: 'download' | 'view'
+  previewable?: boolean
+  protected?: boolean
+  description: string
+  logical_group: string
+  folder: { uuid: string; name: string } | null
+  view_count: number
+  download_count: number
+  created_at: string
+  updated_at: string
+  content_url: string
+  download_url: string
+  thumbnail_url: string | null
+  translations?: Record<string, Record<string, unknown>>
+}
+
+export interface AssetFolder {
+  uuid: string
+  name: string
+  description: string
+  sort_order: number
+  asset_count: number
+  child_count: number
+  parent_uuid: string | null
+  path: Array<{ uuid: string; name: string }>
+  created_at?: string
+  updated_at?: string
+}
+
+export interface TaxonomyItem {
+  uuid: string
+  name: string
+  slug: string
+  color?: string
+  description?: string
+  sort_order?: number
+  project_count?: number
+  translations?: Record<string, Record<string, unknown>>
+}
+
+export interface ProjectLink {
+  translations?: Record<string, Record<string, string>>
+  uuid?: string
+  label: string
+  url: string
+  link_type: string
+  sort_order: number
+}
+
+export interface ProjectSection {
+  uuid?: string
+  client_key: string
+  title: string
+  body: string
+  section_type: string
+  display_mode:
+    | 'text'
+    | 'single'
+    | 'gallery'
+    | 'carousel'
+    | 'album'
+    | 'video'
+    | 'audio'
+    | 'attachments'
+    | 'mixed'
+  asset_uuids: string[]
+  album_uuid: string | null
+  heading_level: 2 | 3 | 4
+  is_visible: boolean
+  media_assets?: Asset[]
+  album?: ProjectAlbum | null
+  sort_order: number
+  translations?: Record<string, Record<string, unknown>>
+}
+
+export interface ProjectContentLayoutItem {
+  key: string
+  kind: 'builtin' | 'custom'
+  visible: boolean
+  sort_order: number
+}
+
+export interface ProjectAlbumAsset {
+  uuid: string
+  caption: string
+  sort_order: number
+  asset: Asset
+}
+
+export interface ProjectAlbum {
+  uuid?: string
+  title: string
+  description: string
+  display_mode: 'grid' | 'carousel'
+  asset_uuids?: string[]
+  assets?: ProjectAlbumAsset[]
+  sort_order: number
+  translations?: Record<string, Record<string, unknown>>
+}
+
+export interface ProjectAsset {
+  uuid: string
+  usage: string
+  caption: string
+  sort_order: number
+  asset: Asset
+}
+
+export interface Project {
+  uuid: string
+  title: string
+  subtitle: string
+  summary: string
+  content: string
+  background: string
+  problem: string
+  solution: string
+  architecture: string
+  contributions: string[]
+  technologies: string[]
+  outcomes: string[]
+  start_date: string
+  end_date: string
+  role: string
+  team_size: number | null
+  status: 'draft' | 'published' | 'hidden' | 'archived'
+  project_state: string
+  is_featured: boolean
+  is_open_source: boolean
+  sort_order: number
+  content_layout: ProjectContentLayoutItem[]
+  category: TaxonomyItem | null
+  tags: TaxonomyItem[]
+  certificates: Certificate[]
+  cover_asset: Asset | null
+  auto_cover_assets: Asset[]
+  links: ProjectLink[]
+  sections: ProjectSection[]
+  albums: ProjectAlbum[]
+  assets: ProjectAsset[]
+  seo_title: string
+  seo_description: string
+  published_at: string | null
+  created_at: string
+  updated_at: string
+  translations: Record<string, Record<string, unknown>>
+  content_language_mode: 'bilingual' | 'single_zh' | 'single_en'
+  /** 展示层扩展：仅静态数据源提供，后端 API 不返回此字段，主题必须容忍缺失。 */
+  showcase?: ProjectShowcase
+}
+
+/** 作品集的证据化展示字段：关键指标、产品原则与来源。 */
+export interface ProjectShowcase {
+  /** 关键指标：value 为展示值，label 说明口径，source 指向证据出处 */
+  metrics: Array<{ value: string; label: string; source?: string }>
+  /** 该作品体现的产品原则关键词，例如「立标准」 */
+  principle?: string
+  /** resume：简历所列项目；personal：简历外的个人项目 */
+  origin: 'resume' | 'personal'
+  /** 一句话复盘：限制、取舍或下一步验证 */
+  reflection?: string
+}
+
+export interface ProjectPayload {
+  title: string
+  subtitle: string
+  summary: string
+  content: string
+  background: string
+  problem: string
+  solution: string
+  architecture: string
+  contributions: string[]
+  technologies: string[]
+  outcomes: string[]
+  start_date: string
+  end_date: string
+  role: string
+  team_size: number | null
+  status: Project['status']
+  project_state: string
+  is_featured: boolean
+  is_open_source: boolean
+  sort_order: number
+  category_uuid: string | null
+  tag_uuids: string[]
+  certificate_uuids: string[]
+  cover_asset_uuid: string | null
+  seo_title: string
+  seo_description: string
+  links: ProjectLink[]
+  sections: ProjectSection[]
+  albums: ProjectAlbum[]
+  content_layout: ProjectContentLayoutItem[]
+  translations: Record<string, Record<string, unknown>>
+  content_language_mode: 'bilingual' | 'single_zh' | 'single_en'
+}
+
+export interface ResumeVersion {
+  uuid: string
+  name: string
+  language: string
+  resume_type: string
+  is_default: boolean
+  is_public: boolean
+  version: string
+  view_count: number
+  download_count: number
+  created_at: string
+  updated_at: string
+  asset: Asset
+}
+
+export interface Certificate {
+  uuid: string
+  name: string
+  issuer: string
+  certificate_type: 'scholarship' | 'competition' | 'patent' | 'course' | 'other'
+  issued_at: string
+  description: string
+  credential_no: string
+  credential_url: string
+  is_public: boolean
+  sort_order: number
+  project_count: number
+  projects?: Array<{
+    uuid: string
+    title: string
+    subtitle: string
+    summary: string
+    start_date: string
+    end_date: string
+    role: string
+    status: Project['status']
+  }>
+  asset: Asset | null
+  icon_asset: Asset | null
+  icon_name: string
+  icon_svg: string
+  created_at: string
+  updated_at: string
+  translations?: Record<string, Record<string, unknown>>
+  content_language_mode?: 'bilingual' | 'single_zh' | 'single_en'
+}
+
+export interface SiteSettings {
+  site_name?: string
+  person_name?: string
+  headline?: string
+  bio?: string
+  current_identity?: string
+  research_directions?: string[]
+  email?: string
+  github_url?: string
+  gitee_url?: string
+  location?: string
+  avatar_asset_uuid?: string
+  footer_text?: string
+  footer_eyebrow?: string
+  footer_heading?: string
+  hero_eyebrow?: string
+  hero_focus_label?: string
+  hero_focus_value?: string
+  brand_mark_text?: string
+  brand_icon_asset_uuid?: string
+  navigation_items?: Array<{ label: string; to: string; kind: 'route' | 'external' }>
+  home_stats?: Array<{ value: string; label: string }>
+  home_copy?: Record<string, string>
+  home_capabilities?: Array<{ title: string; description: string; epigraph?: string }>
+  contact_methods?: Array<{
+    type: string
+    label: string
+    value: string
+    url: string
+    description: string
+    icon_asset_uuid: string
+    icon_name: string
+    icon_svg: string
+  }>
+  page_content?: Record<string, { eyebrow: string; title: string; description: string }>
+  analytics_enabled?: boolean
+  analytics_retention_days?: number
+  analytics_notice_enabled?: boolean
+  /** 公开页面的生成式背景音乐；默认开启，访客仍可自行关闭 */
+  music_enabled?: boolean
+  featured_project_count?: number
+  default_seo_title?: string
+  default_seo_description?: string
+  primary_language?: 'zh-CN' | 'en'
+  translations?: Record<string, SiteSettings>
+  [key: string]: unknown
+}
+
+export interface SiteData {
+  settings: SiteSettings
+  categories: TaxonomyItem[]
+  tags: TaxonomyItem[]
+  base_url: string
+}

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <!--
+      [INPUT]: 依赖 Vite 的 %BASE_URL% 占位符与 /src/main.ts
+      [OUTPUT]: 应用 HTML 外壳
+      [POS]: 前端入口文档。favicon 用 %BASE_URL% 前缀，项目站点部署时不会指向根域名的旧站。
+      [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+    -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#fafaf8" />
+    <meta name="description" content="毕骁扬的 AI 产品作品集：Agent 系统、AI 评测、人在回路与个人 AI 基建。每个作品按「问题 → 决策 → 贡献 → 证据」组织。" />
+    <link rel="icon" href="%BASE_URL%favicon.svg" type="image/svg+xml" />
+    <title>毕骁扬 · AI 产品经理作品集</title>
+    <style>
+      html { background: #fafaf8; }
+      .skip-link { position: fixed; top: 12px; left: 12px; z-index: 100; padding: 8px 14px; border-radius: 999px; background: #1d1d1f; color: #fafaf8; font: 13px -apple-system, "PingFang SC", sans-serif; text-decoration: none; transform: translateY(-200%); }
+      .skip-link:focus { transform: none; }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,202 @@
+/**
+ * [INPUT]: 依赖 base.css 的 --cz-* token 与排版原子；被 views 下的 CosmoProjects、CosmoCase、CosmoAbout、CosmoNotFound 使用
+ * [OUTPUT]: 文档页版式：页头、筛选、案例四段式（标签列 + 正文列）、指标条、图集、Markdown 正文、上下篇、空状态
+ * [POS]: themes/cosmo/styles 的文档层，与 home.css 平级。首页之外的页面都是「读」的页面：
+ *        不用 sticky 叙事，改用左侧编号标签 + 右侧正文的双栏，标签在桌面端随滚动钉住。
+ *        .cz-prose 重写 MarkdownContent 的 .rich-content，因此静态模式不需要加载 evidentfolio 原样式。
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
+
+/* ────────────────────────── 页面骨架 ────────────────────────── */
+
+.cz-doc {
+  --cz-label: clamp(140px, 16vw, 220px);
+  width: min(100%, 1240px);
+  margin: 0 auto;
+  padding: clamp(128px, 18vh, 176px) var(--cz-gutter) clamp(96px, 14vh, 160px);
+}
+.cz-back { display: inline-block; margin-bottom: 56px; color: var(--cz-muted); font-size: 12px; letter-spacing: 0.08em; transition: color 0.3s; }
+.cz-back:hover { color: var(--cz-ink); }
+
+.cz-doc__head { max-width: 760px; margin-bottom: clamp(56px, 9vh, 96px); }
+.cz-doc__head .cz-eyebrow { margin-bottom: 28px; }
+.cz-doc__head h1 { font-size: clamp(38px, 4.6vw, 68px); line-height: 1.2; letter-spacing: -0.015em; }
+.cz-doc__lead { margin-top: 28px; color: var(--cz-muted); font-size: clamp(15px, 1.15vw, 17px); line-height: 2; }
+
+.cz-loading { min-height: 100vh; }
+.cz-empty { min-height: 72vh; display: grid; align-content: center; gap: 28px; }
+.cz-empty h1 { font-size: clamp(30px, 3.6vw, 52px); line-height: 1.3; }
+.cz-empty .cz-more { justify-self: start; }
+
+/* ────────────────────────── 作品索引 ────────────────────────── */
+
+.cz-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+.cz-filters button {
+  padding: 9px 18px;
+  border: 1px solid var(--cz-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cz-muted);
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: color 0.3s, border-color 0.3s, background 0.3s;
+}
+.cz-filters button sup { margin-left: 6px; color: var(--cz-faint); font-size: 10.5px; }
+.cz-filters button:hover { border-color: var(--cz-faint); color: var(--cz-ink); }
+.cz-filters button.is-on { border-color: var(--cz-ink); background: var(--cz-ink); color: var(--cz-paper); }
+.cz-filters button.is-on sup { color: var(--cz-ghost); }
+.cz-filters__note { min-height: 1.8em; margin: 0 0 40px; color: var(--cz-faint); font-size: 13px; }
+
+/* ────────────────────────── 案例页眉 ────────────────────────── */
+
+.cz-case__head { max-width: 900px; }
+.cz-case__head .cz-eyebrow { margin-bottom: 26px; }
+.cz-case__title { font-size: clamp(40px, 5vw, 80px); line-height: 1.14; letter-spacing: -0.02em; }
+.cz-case__sub { margin-top: 22px; color: var(--cz-ink-2); font-size: clamp(16px, 1.3vw, 19px); line-height: 1.8; }
+
+.cz-facts { display: flex; flex-wrap: wrap; gap: 18px clamp(28px, 4vw, 56px); margin: 44px 0 0; }
+.cz-facts div { display: grid; gap: 4px; }
+.cz-facts dt { color: var(--cz-faint); font-size: 11px; letter-spacing: 0.14em; }
+.cz-facts dd { margin: 0; color: var(--cz-ink-2); font-size: 14px; line-height: 1.7; }
+.cz-facts--stack { display: grid; gap: 22px; margin: 0; }
+.cz-facts--stack div { grid-template-columns: var(--cz-label) minmax(0, 1fr); gap: 0; }
+
+.cz-award { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px; margin-top: 28px; color: var(--cz-ink-2); font-size: 14px; }
+.cz-award span { color: var(--cz-brand); font-size: 11px; letter-spacing: 0.16em; }
+
+.cz-case__lead {
+  max-width: 880px;
+  margin: clamp(56px, 9vh, 96px) 0 0;
+  color: var(--cz-ink);
+  font-size: clamp(20px, 1.8vw, 27px);
+  line-height: 1.85;
+}
+
+/* ────────────────────────── 指标条 ────────────────────────── */
+
+.cz-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin: clamp(56px, 8vh, 88px) 0 0;
+  padding: 0;
+  border-top: 1px solid var(--cz-line);
+  list-style: none;
+}
+.cz-metrics li { display: grid; align-content: start; gap: 8px; padding: 30px 28px 30px 0; border-bottom: 1px solid var(--cz-line); }
+.cz-metrics strong { color: var(--cz-ink); font-size: clamp(30px, 3vw, 46px); font-weight: 300; line-height: 1.15; letter-spacing: -0.01em; }
+.cz-metrics span { color: var(--cz-ink-2); font-size: 13.5px; line-height: 1.7; }
+.cz-metrics small { color: var(--cz-faint); font-size: 10.5px; letter-spacing: 0.04em; }
+
+/* ────────────────────────── 图片 ────────────────────────── */
+
+.cz-figure { display: grid; gap: 12px; }
+.cz-figure img { width: 100%; height: auto; border: 1px solid var(--cz-line); border-radius: 10px; background: #f0f0ec; }
+.cz-figure figcaption { color: var(--cz-muted); font-size: 12.5px; line-height: 1.7; }
+.cz-case__cover { margin-top: clamp(56px, 8vh, 88px); }
+.cz-case__cover img { max-height: 78vh; object-fit: cover; object-position: top; }
+
+.cz-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 28px 24px; margin-top: 44px; }
+.cz-gallery a { display: block; transition: transform 0.6s var(--cz-ease); }
+.cz-gallery a:hover { transform: translateY(-3px); }
+
+/* ────────────────────────── 四段式 ────────────────────────── */
+
+.cz-part {
+  display: grid;
+  grid-template-columns: var(--cz-label) minmax(0, 1fr);
+  align-items: start;
+  margin-top: clamp(72px, 11vh, 128px);
+  padding-top: 28px;
+  border-top: 1px solid var(--cz-line);
+}
+.cz-part__label {
+  position: sticky;
+  top: 108px;
+  display: grid;
+  gap: 10px;
+  color: var(--cz-ink);
+  font: 300 clamp(20px, 1.7vw, 26px)/1.3 var(--cz-serif);
+}
+.cz-part__label span { color: var(--cz-faint); font-size: 12px; letter-spacing: 0.14em; }
+.cz-part__body { max-width: 760px; margin: 0; padding: 0; }
+.cz-part__note { margin-top: 24px; color: var(--cz-muted); font-size: 13px; }
+
+.cz-decisions { padding: 0; list-style: none; }
+.cz-decisions li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px 0; padding: 0 0 36px; }
+.cz-decisions li + li { padding-top: 36px; border-top: 1px dashed var(--cz-line); }
+.cz-decisions li > span { grid-row: span 2; padding-top: 7px; color: var(--cz-brand); font-size: 12px; }
+.cz-decisions h3 { color: var(--cz-ink); font-size: clamp(19px, 1.5vw, 23px); line-height: 1.5; }
+.cz-decisions p { color: var(--cz-ink-2); font-size: 15px; line-height: 1.95; }
+
+.cz-ticks { padding: 0; list-style: none; }
+.cz-ticks li { position: relative; padding: 14px 0 14px 28px; border-bottom: 1px solid var(--cz-line); color: var(--cz-ink-2); font-size: 15px; line-height: 1.85; }
+.cz-ticks li:first-child { padding-top: 0; }
+.cz-ticks li::before { content: ""; position: absolute; top: 26px; left: 2px; width: 12px; height: 1px; background: var(--cz-faint); }
+.cz-ticks li:first-child::before { top: 12px; }
+
+.cz-note { margin-top: 48px; }
+.cz-note h3 { margin-bottom: 18px; color: var(--cz-muted); font-size: 12px; font-weight: 400; letter-spacing: 0.1em; }
+
+.cz-links { display: grid; margin-top: 44px; padding: 0; border-top: 1px solid var(--cz-line); list-style: none; }
+.cz-links a { display: grid; grid-template-columns: 120px minmax(0, 1fr) auto; align-items: baseline; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--cz-line); color: var(--cz-ink); font-size: 14.5px; transition: padding 0.5s var(--cz-ease), color 0.3s; }
+.cz-links a .cz-mono { overflow: hidden; color: var(--cz-faint); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.cz-links a:hover { padding-left: 10px; color: var(--cz-brand); }
+
+.cz-part--reflection blockquote { margin: 0; color: var(--cz-ink); font-size: clamp(19px, 1.6vw, 24px); line-height: 1.9; }
+
+/* ────────────────────────── Markdown 正文 ────────────────────────── */
+
+.cz-prose { color: var(--cz-ink-2); font-size: 15.5px; line-height: 1.95; }
+.cz-prose .rich-content > * + * { margin-top: 1.1em; }
+.cz-prose ul, .cz-prose ol { padding-left: 1.3em; }
+.cz-prose li + li { margin-top: 0.35em; }
+.cz-prose li::marker { color: var(--cz-faint); }
+.cz-prose strong { color: var(--cz-ink); font-weight: 600; }
+.cz-prose a { border-bottom: 1px solid var(--cz-faint); color: var(--cz-ink); }
+.cz-prose code { padding: 0.1em 0.4em; border-radius: 4px; background: rgb(29 29 31 / 5%); font: 0.88em var(--cz-mono); }
+.cz-prose h3, .cz-prose h4 { color: var(--cz-ink); font: 400 17px/1.6 var(--cz-sans); }
+.cz-prose blockquote { margin: 0; padding-left: 18px; border-left: 2px solid var(--cz-line); color: var(--cz-muted); }
+.cz-prose table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+.cz-prose th { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--cz-ink); color: var(--cz-muted); font: 400 11.5px var(--cz-mono); letter-spacing: 0.06em; text-align: left; }
+.cz-prose td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--cz-line); color: var(--cz-ink); }
+.cz-prose th[style*="right"], .cz-prose td[style*="right"] { text-align: right; }
+
+/* ────────────────────────── 案例页脚 ────────────────────────── */
+
+.cz-case__foot { margin-top: clamp(88px, 13vh, 144px); padding-top: 32px; border-top: 1px solid var(--cz-line); }
+.cz-case__foot .cz-facts dd { color: var(--cz-muted); font-size: 13.5px; }
+.cz-pager { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 72px; }
+.cz-pager a { display: grid; gap: 10px; padding: 28px 0; border-top: 1px solid var(--cz-ink); }
+.cz-pager span { color: var(--cz-faint); font-size: 11.5px; letter-spacing: 0.1em; }
+.cz-pager strong { color: var(--cz-ink); font-size: clamp(19px, 1.7vw, 25px); font-weight: 300; line-height: 1.4; transition: color 0.3s; }
+.cz-pager a:hover strong { color: var(--cz-brand); }
+.cz-pager__next { grid-column: 2; text-align: right; }
+
+/* ────────────────────────── 关于 ────────────────────────── */
+
+.cz-about__identity { margin-top: 18px; color: var(--cz-muted); font-size: 12.5px; letter-spacing: 0.1em; }
+.cz-tags { display: flex; flex-wrap: wrap; gap: 10px; padding: 0; list-style: none; }
+.cz-tags li { padding: 8px 16px; border: 1px solid var(--cz-line); border-radius: 999px; color: var(--cz-ink-2); font-size: 14px; }
+.cz-rows { padding: 0; list-style: none; }
+.cz-rows li { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) auto; align-items: baseline; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--cz-line); }
+.cz-rows li:first-child { padding-top: 0; }
+.cz-rows strong { color: var(--cz-ink); font-size: 15.5px; font-weight: 400; }
+.cz-rows span { color: var(--cz-muted); font-size: 14px; }
+.cz-rows time { color: var(--cz-faint); font-size: 12px; white-space: nowrap; }
+
+/* ────────────────────────── 窄屏 ────────────────────────── */
+
+@media (max-width: 760px) {
+  .cz-part { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .cz-part__label { position: static; display: flex; align-items: baseline; gap: 14px; }
+  .cz-facts--stack div { grid-template-columns: 64px minmax(0, 1fr); }
+  .cz-metrics { grid-template-columns: 1fr 1fr; }
+  .cz-metrics li { padding-right: 14px; }
+  .cz-links a { grid-template-columns: 84px minmax(0, 1fr) auto; }
+  .cz-rows li { grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; }
+  .cz-rows span { grid-column: 1; grid-row: 2; }
+  .cz-rows time { grid-row: 1; grid-column: 2; }
+  .cz-pager { grid-template-columns: 1fr; }
+  .cz-pager__next { grid-column: 1; }
+  .cz-prose { overflow-x: auto; }
+}

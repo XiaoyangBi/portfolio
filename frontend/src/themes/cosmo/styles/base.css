@@ -1,0 +1,172 @@
+/**
+ * [INPUT]: 无依赖；由 themes/cosmo/index.ts 引入
+ * [OUTPUT]: cosmo 主题的设计 token、排版原子类、页眉页脚与按钮样式
+ * [POS]: themes/cosmo/styles 的地基。home.css 与 doc.css 只使用这里定义的 token。
+ *        全部选择器挂在 :root[data-surface='cosmo'] 或 .cz- 前缀下，与 evidentfolio 原主题互不干扰。
+ *        视觉参考 cosmo-ai.cn：纸白底、细宋体标题、等宽编号、黑色胶囊主按钮、下划线次按钮。
+ * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+ */
+
+/* ────────────────────────── Token ────────────────────────── */
+
+:root[data-surface='cosmo'] {
+  --cz-paper: #fafaf8;
+  --cz-ink: #1d1d1f;
+  --cz-ink-2: #48484c;
+  --cz-muted: #8a8a8e;
+  --cz-faint: #b9b9bd;
+  --cz-ghost: #c9c9cc;
+  --cz-line: rgb(29 29 31 / 8%);
+  --cz-brand: #16b0ea;
+  --cz-night-bg: #0b0d10;
+  --cz-night-ink: #f2f2f0;
+  --cz-serif: "Songti SC", "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", serif;
+  --cz-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --cz-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+  --cz-gutter: clamp(24px, 6vw, 112px);
+  --cz-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --night: 0;
+  color-scheme: light;
+  background: var(--cz-paper);
+  scroll-behavior: auto;
+}
+
+:root[data-surface='cosmo'] body {
+  margin: 0;
+  background: var(--cz-paper);
+  color: var(--cz-ink);
+  font: 16px/1.8 var(--cz-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+:root[data-surface='cosmo'] ::selection { background: rgb(22 176 234 / 18%); color: inherit; }
+:root[data-surface='cosmo'] :focus-visible { outline: 1.5px solid var(--cz-brand); outline-offset: 4px; border-radius: 4px; }
+
+/* 重置用 :where 归零特异度，组件类名无需 !important 即可设置外边距 */
+:where(.cz-shell) *, :where(.cz-shell) *::before, :where(.cz-shell) *::after { box-sizing: border-box; }
+:where(.cz-shell) :where(button, input) { color: inherit; font: inherit; }
+.cz-shell { position: relative; min-height: 100vh; }
+:where(.cz-shell) a { color: inherit; text-decoration: none; }
+:where(.cz-shell) :where(p, h1, h2, h3, ol, ul, dl, figure, blockquote) { margin: 0; }
+:where(.cz-shell) :where(h1, h2, h3) { font-weight: 300; }
+:where(.cz-shell) img { display: block; max-width: 100%; }
+.cz-main { position: relative; z-index: 2; }
+
+/* ────────────────────────── 排版原子 ────────────────────────── */
+
+.cz-serif { font-family: var(--cz-serif); font-weight: 300; letter-spacing: -0.005em; }
+.cz-mono { font-family: var(--cz-mono); }
+.cz-line { display: block; white-space: nowrap; }
+.cz-eyebrow, .cz-index, .cz-meta { color: var(--cz-muted); font: 12px/1.6 var(--cz-mono); letter-spacing: 0.14em; }
+.cz-meta { letter-spacing: 0.06em; }
+
+/* ────────────────────────── 夜幕与星空 ────────────────────────── */
+
+.cz-night {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: var(--cz-night-bg);
+  opacity: var(--night);
+  pointer-events: none;
+}
+.cz-stage { position: fixed; inset: 0; z-index: 1; width: 100vw; height: 100vh; pointer-events: none; }
+
+/* ────────────────────────── 页眉 ────────────────────────── */
+
+.cz-top {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 26px var(--cz-gutter);
+  color: var(--cz-ink);
+  pointer-events: none;
+  transition: color 0.5s var(--cz-ease), background-color 0.5s var(--cz-ease), opacity 0.4s var(--cz-ease);
+}
+.cz-top.is-hidden { opacity: 0; pointer-events: none; }
+.cz-top a { pointer-events: auto; }
+.cz-top.is-solid { background: linear-gradient(var(--cz-paper) 55%, rgb(250 250 248 / 0%)); }
+.cz-brand { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; letter-spacing: 0.02em; }
+.cz-brand__mark {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--cz-ink);
+  color: var(--cz-paper);
+  font: 11px/1 var(--cz-serif);
+  transition: background 0.5s var(--cz-ease), color 0.5s var(--cz-ease);
+}
+.cz-top nav { display: flex; gap: clamp(18px, 2.4vw, 36px); font-size: 13px; }
+.cz-top nav a { color: var(--cz-muted); transition: color 0.3s; }
+.cz-top nav a:hover, .cz-top nav a.router-link-exact-active { color: var(--cz-ink); }
+.cz-top nav .cz-top__contact { color: var(--cz-ink); }
+
+:root.is-night .cz-top { color: var(--cz-night-ink); }
+:root.is-night .cz-top nav a { color: rgb(242 242 240 / 55%); }
+:root.is-night .cz-top nav a:hover, :root.is-night .cz-top nav .cz-top__contact { color: var(--cz-night-ink); }
+:root.is-night .cz-brand__mark { background: var(--cz-night-ink); color: var(--cz-night-bg); }
+
+/* ────────────────────────── 按钮 ────────────────────────── */
+
+.cz-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 28px;
+  border-radius: 999px;
+  background: var(--cz-ink);
+  color: var(--cz-paper) !important;
+  font-size: 14.5px;
+  letter-spacing: 0.02em;
+  transition: transform 0.5s var(--cz-ease), background 0.3s;
+}
+.cz-cta:hover { transform: translateY(-2px); }
+.cz-ghost, .cz-more {
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--cz-faint);
+  color: var(--cz-muted);
+  font-size: 14px;
+  transition: color 0.3s, border-color 0.3s;
+}
+.cz-ghost:hover, .cz-more:hover { color: var(--cz-ink); border-color: var(--cz-ink); }
+
+/* ────────────────────────── 页脚 ────────────────────────── */
+
+.cz-foot {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 40px;
+  padding: 40px var(--cz-gutter) 48px;
+  border-top: 1px solid var(--cz-line);
+  background: var(--cz-paper);
+  color: var(--cz-muted);
+  font-size: 12.5px;
+}
+.cz-foot__main { display: grid; gap: 12px; }
+.cz-foot nav { display: flex; flex-wrap: wrap; gap: 12px 28px; }
+.cz-foot a:hover { color: var(--cz-ink); }
+.cz-foot__contact { display: grid; gap: 4px; text-align: right; }
+.cz-foot__contact strong { color: var(--cz-ink); font-size: 13px; font-weight: 400; }
+
+/* ────────────────────────── 动效偏好 ────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .cz-shell *, .cz-shell *::before, .cz-shell *::after { transition: none !important; animation: none !important; }
+}
+
+@media (max-width: 760px) {
+  .cz-top { padding: 20px var(--cz-gutter); }
+  .cz-top nav a:not(.cz-top__keep) { display: none; }
+  .cz-foot__contact { text-align: left; }
+}
