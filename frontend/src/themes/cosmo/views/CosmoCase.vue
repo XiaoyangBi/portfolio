@@ -1,6 +1,7 @@
 <!--
   [INPUT]: 依赖 vue-router 的 useRoute；依赖 @/api/public 的 publicApi；依赖 @/components/content/MarkdownContent；
-           依赖 @/composables/useMeta、@/stores/site、@/utils/pageNavigation 的 trackPageLoad；依赖 @/types 的 Project
+           依赖 @/composables/useMeta、@/stores/site、@/utils/pageNavigation 的 trackPageLoad；依赖 @/types 的 Project；
+           依赖 ../composables/workLinks 的真实链接分类
   [OUTPUT]: CosmoCase 页面组件（路由 /projects/:uuid）
   [POS]: themes/cosmo/views 的案例详情页，是作品集的论证单元。
          版式固定为四段：01 问题 → 02 决策 → 03 我做了什么 → 04 证据，末尾是复盘与上下篇。
@@ -18,12 +19,14 @@ import MarkdownContent from '@/components/content/MarkdownContent.vue'
 import { useMeta } from '@/composables/useMeta'
 import { useSiteStore } from '@/stores/site'
 import { trackPageLoad } from '@/utils/pageNavigation'
+import { classifyLinks, isExternal } from '../composables/workLinks'
 
 const route = useRoute()
 const site = useSiteStore()
 const project = ref<Project | null>(null)
 const siblings = ref<Project[]>([])
 const missing = ref(false)
+const launch = computed(() => (project.value ? classifyLinks(project.value) : []))
 
 /* ────────────────────────── 加载 ────────────────────────── */
 
@@ -117,6 +120,18 @@ useMeta({
         </div>
       </dl>
       <p v-if="award" class="cz-award"><span class="cz-mono">AWARD</span>{{ award.name }}<template v-if="award.issuer"> · {{ award.issuer }}</template></p>
+      <div v-if="launch.length" class="cz-case__launch">
+        <a
+          v-for="item in launch"
+          :key="item.link.url"
+          class="cz-launch"
+          :class="`is-${item.kind}`"
+          :href="item.link.url"
+          :target="isExternal(item.link.url) ? '_blank' : undefined"
+          :download="isExternal(item.link.url) ? undefined : ''"
+          rel="noopener"
+        >{{ item.label }}<span aria-hidden="true">↗</span></a>
+      </div>
     </header>
 
     <p class="cz-case__lead cz-serif">{{ project.summary }}</p>

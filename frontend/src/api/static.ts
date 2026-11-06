@@ -74,7 +74,12 @@ export function toProject(work: WorkSource): Project {
     is_open_source: work.links.some((link) => link.url.includes('github.com')), sort_order: work.order, content_layout: [],
     category: category(work), tags: work.tags.map((tag) => ({ uuid: tag, slug: tag, name: tag })), certificates: certificate(work),
     cover_asset: cover, auto_cover_assets: cover ? [cover] : [],
-    links: work.links.map((link, index) => ({ label: link.label, url: link.url, link_type: link.url.includes('github.com') ? 'repository' : 'website', sort_order: index })),
+    links: work.links.map((link, index) => ({
+      label: link.label,
+      url: link.url.startsWith('/') ? assetUrl(link.url) : link.url,
+      link_type: /\.zip(\?|#|$)/i.test(link.url) ? 'download' : link.url.includes('github.com') ? 'repository' : 'website',
+      sort_order: index,
+    })),
     sections: sections(work), albums: [], assets: [],
     seo_title: work.title, seo_description: work.subtitle, published_at: null, created_at: '', updated_at: '',
     translations: {}, content_language_mode: 'single_zh',

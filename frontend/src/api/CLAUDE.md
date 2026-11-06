@@ -9,7 +9,7 @@ L2 | 父级: /CLAUDE.md
 ## 成员清单
 
 public.ts: 公开端门面，导出 IS_STATIC、publicApi、Paginated、prepareLocalePage；静态模式跳过语言预载
-static.ts: 静态适配器，WorkSource → Project 映射（决策 → decision 区块，附注 → note，图集 → gallery，奖项 → Certificate）；只返回 published，draft 在 VITE_SHOW_DRAFTS=1 时放开，archived 任何模式都不公开；素材 URL 经 assetUrl() 加 base 前缀
+static.ts: 静态适配器，WorkSource → Project 映射（决策 → decision 区块，附注 → note，图集 → gallery，奖项 → Certificate）；只返回 published，draft 在 VITE_SHOW_DRAFTS=1 时放开，archived 任何模式都不公开；素材 URL 与 links 中的本地路径都经 assetUrl() 加 base 前缀
 client.ts: axios 传输层，evidentfolio 原实现；导出 api、ApiClientError、API_BASE_URL
 admin.ts: 后台门面，evidentfolio 原实现；仅 CMS 模式的 /admin 使用
 public.test.ts: 后端模式测试，测试内把数据源切为 api，验证语言预载

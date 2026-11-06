@@ -1,6 +1,6 @@
 /**
  * [INPUT]: 依赖 base.css 的 --cz-* token 与排版原子；被 views 下的 CosmoProjects、CosmoCase、CosmoAbout、CosmoNotFound 使用
- * [OUTPUT]: 文档页版式：页头、筛选、案例四段式（标签列 + 正文列）、指标条、图集、Markdown 正文、上下篇、空状态
+ * [OUTPUT]: 文档页版式：页头、置顶开源入口区、筛选、案例四段式、页眉 CTA、指标条、图集、Markdown 正文、上下篇、空状态
  * [POS]: themes/cosmo/styles 的文档层，与 home.css 平级。首页之外的页面都是「读」的页面：
  *        不用 sticky 叙事，改用左侧编号标签 + 右侧正文的双栏，标签在桌面端随滚动钉住。
  *        .cz-prose 重写 MarkdownContent 的 .rich-content，因此静态模式不需要加载 evidentfolio 原样式。
@@ -28,6 +28,45 @@
 .cz-empty h1 { font-size: clamp(30px, 3.6vw, 52px); line-height: 1.3; }
 .cz-empty .cz-more { justify-self: start; }
 
+/* ────────────────────────── 置顶：真实开源与在线入口 ────────────────────────── */
+
+.cz-launchpad {
+  margin-bottom: clamp(52px, 8vh, 84px);
+  padding: clamp(26px, 3.4vw, 46px);
+  border: 1px solid var(--cz-line);
+  border-radius: 16px;
+  background: linear-gradient(155deg, rgb(22 176 234 / 5%), rgb(250 250 248 / 0%) 62%);
+}
+.cz-launchpad__intro { display: grid; gap: 12px; max-width: 640px; }
+.cz-launchpad__intro h2 { color: var(--cz-ink); font-size: clamp(26px, 2.6vw, 38px); line-height: 1.3; }
+.cz-launchpad__lead { color: var(--cz-muted); font-size: 13.5px; line-height: 1.9; }
+.cz-launchpad__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+  margin: 30px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.cz-launchcard {
+  position: relative;
+  display: grid;
+  gap: 7px;
+  height: 100%;
+  padding: 18px 42px 18px 20px;
+  border: 1px solid var(--cz-line);
+  border-radius: 10px;
+  background: var(--cz-paper);
+  transition: transform 0.5s var(--cz-ease), border-color 0.3s, box-shadow 0.5s var(--cz-ease);
+}
+.cz-launchcard:hover { transform: translateY(-3px); border-color: rgb(22 176 234 / 40%); box-shadow: 0 12px 30px rgb(29 29 31 / 6%); }
+.cz-launchcard.is-demo { border-color: rgb(22 176 234 / 32%); }
+.cz-launchcard__kind { color: var(--cz-brand); font-size: 10.5px; letter-spacing: 0.12em; }
+.cz-launchcard strong { color: var(--cz-ink); font-size: 17px; font-weight: 300; line-height: 1.4; }
+.cz-launchcard__url { overflow: hidden; color: var(--cz-faint); font-size: 10.5px; text-overflow: ellipsis; white-space: nowrap; }
+.cz-launchcard__go { position: absolute; top: 18px; right: 18px; color: var(--cz-faint); font-size: 15px; transition: color 0.3s, transform 0.4s var(--cz-ease); }
+.cz-launchcard:hover .cz-launchcard__go { color: var(--cz-brand); transform: translate(2px, -2px); }
+
 /* ────────────────────────── 作品索引 ────────────────────────── */
 
 .cz-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
@@ -48,6 +87,22 @@
 .cz-filters__note { min-height: 1.8em; margin: 0 0 40px; color: var(--cz-faint); font-size: 13px; }
 
 /* ────────────────────────── 案例页眉 ────────────────────────── */
+
+.cz-case__launch { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+.cz-launch {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 10px 18px;
+  border: 1px solid var(--cz-ink);
+  border-radius: 999px;
+  color: var(--cz-ink);
+  font-size: 13.5px;
+  transition: background 0.3s, color 0.3s, border-color 0.3s, transform 0.4s var(--cz-ease);
+}
+.cz-launch span { color: var(--cz-faint); font-size: 14px; }
+.cz-launch.is-demo { border-color: var(--cz-brand); color: var(--cz-brand); }
+.cz-launch:hover { background: var(--cz-ink); color: var(--cz-paper); transform: translateY(-2px); }
+.cz-launch.is-demo:hover { background: var(--cz-brand); border-color: var(--cz-brand); color: var(--cz-paper); }
+.cz-launch:hover span { color: inherit; opacity: 0.7; }
 
 .cz-case__head { max-width: 900px; }
 .cz-case__head .cz-eyebrow { margin-bottom: 26px; }
@@ -187,6 +242,9 @@
 /* ────────────────────────── 窄屏 ────────────────────────── */
 
 @media (max-width: 760px) {
+  .cz-launchpad { padding: 22px; }
+  .cz-launchpad__grid { grid-template-columns: 1fr; }
+  .cz-badge { padding: 2px 8px; font-size: 10px; }
   .cz-part { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .cz-part__label { position: static; display: flex; align-items: baseline; gap: 14px; }
   .cz-facts--stack div { grid-template-columns: 64px minmax(0, 1fr); }

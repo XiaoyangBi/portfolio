@@ -28,6 +28,7 @@ L2 | 父级: /CLAUDE.md
 index.ts: 样式入口，按 base → home → doc 顺序引入
 CosmoLayout.vue: 根布局，声明 data-surface、挂载夜幕层与 StarStage、安装惯性滚动；行星数等于公开作品数
 composables/useChapters.ts: 滚动叙事引擎，导出 useChapters、stage、STAGE_EVENT、isStaticFlow
+composables/workLinks.ts: 纯函数，按真实 links 派生「已部署可访问 / 已开源 / 源码包」三种状态。首页徽标、索引页置顶入口、案例页 CTA 共用这一份判定；无入口即空，不编造
 components/StarStage.vue: canvas 星空，首屏右侧作品星系 + 夜幕星尘；空闲时停止 RAF
 components/CosmoHeader.vue: 固定页眉，首页透明，其余页面滚动后加纸色渐变；滚到页脚淡出；夜间由 :root.is-night 反色
 components/CosmoFooter.vue: 页脚，导航 + 联系方式 + 来源声明

@@ -101,7 +101,7 @@ export const htmlTrio: WorkSource = {
   metrics: [{ value: '3', label: '个 Skill 串成一条管线' }],
   stack: ['Python', 'Playwright', 'pypdf'],
   tags: ['Skill', '文档转换'],
-  links: [],
+  links: [{ label: '下载源码包（3 个 Skill）', url: '/downloads/html-trio.zip' }],
 }
 
 export const quickCapture: WorkSource = {

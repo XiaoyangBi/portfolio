@@ -1,6 +1,6 @@
 /**
  * [INPUT]: 依赖 base.css 的 --cz-* token；依赖 useChapters 写入的 --p、--in 与根节点 --night
- * [OUTPUT]: 首页分章版式、五个演示组件、结语联系方式栏、作品列表（WorkList）与封面预览样式
+ * [OUTPUT]: 首页分章版式、五个演示组件、结语联系方式栏、作品列表与封面预览、开源状态徽标
  * [POS]: themes/cosmo/styles 的首页层。章节 = 高度 --len vh 的滚动轨道 + 内部 sticky 满屏画框（.cz-pin）。
  *        桌面端各元素绝对定位在画框内；≤760px 或减少动效时退化为普通文档流（见文末）。
  *        夜间章节的所有内容由 .cz-pin 统一收口可见度，避免搜索框与引文在夜幕褪去后仍全亮。
@@ -275,6 +275,22 @@
 .cz-work__title { color: var(--cz-ink); font-size: clamp(22px, 2.3vw, 34px); line-height: 1.3; transition: color 0.4s; }
 .cz-work__title sup { margin-left: 10px; color: var(--cz-brand); font: 11px var(--cz-mono); letter-spacing: 0.08em; vertical-align: super; }
 .cz-work__sub { color: var(--cz-muted); font-size: 14.5px; line-height: 1.8; }
+.cz-work__badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
+.cz-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 10px;
+  border: 1px solid var(--cz-line);
+  border-radius: 999px;
+  color: var(--cz-muted);
+  font: 11px/1.5 var(--cz-mono);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.cz-badge::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--cz-faint); }
+.cz-badge.is-demo { border-color: rgb(22 176 234 / 32%); color: var(--cz-brand); }
+.cz-badge.is-demo::before { background: var(--cz-brand); }
+.cz-badge.is-source { border-color: rgb(29 29 31 / 16%); color: var(--cz-ink-2); }
+.cz-badge.is-source::before { background: var(--cz-ink-2); }
 .cz-work__meta { display: flex; gap: 18px; color: var(--cz-faint); font-size: 12px; letter-spacing: 0.04em; white-space: nowrap; }
 .cz-work__arrow { color: var(--cz-faint); font-size: 18px; transform: translateX(-6px); opacity: 0; transition: transform 0.5s var(--cz-ease), opacity 0.4s; }
 .cz-work:hover { padding-left: 12px; }

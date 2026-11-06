@@ -1,14 +1,16 @@
 <!--
-  [INPUT]: 依赖 @/types 的 Project
-  [OUTPUT]: WorkList 组件：编号作品行 + 跟随指针的封面预览
+  [INPUT]: 依赖 @/types 的 Project；依赖 ../composables/workLinks 的 badges
+  [OUTPUT]: WorkList 组件：编号作品行 + 开源状态徽标 + 跟随指针的封面预览
   [POS]: themes/cosmo/components 的作品列表，首页「精选作品」与作品索引页共用。
-         行内只放判断一件作品是否值得点开所需的信息：标题、一句话定位、原则、年份、成熟度。
+         行内只放判断一件作品是否值得点开所需的信息：标题、一句话定位、真实可访问状态、原则、年份、成熟度。
+         徽标由 links 派生；没有入口的作品不显示徽标，不编造状态。
          封面预览只在精确指针设备上出现，触屏不显示。
   [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
 -->
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Project } from '@/types'
+import { badges } from '../composables/workLinks'
 
 defineProps<{ projects: Project[] }>()
 const peek = ref<Project | null>(null)
@@ -29,6 +31,9 @@ function move(event: MouseEvent) { point.value = { x: event.clientX, y: event.cl
         <span class="cz-work__body">
           <span class="cz-work__title cz-serif">{{ project.title }}<sup v-if="project.showcase?.origin === 'resume'">简历项目</sup></span>
           <span class="cz-work__sub">{{ project.subtitle }}</span>
+          <span v-if="badges(project).length" class="cz-work__badges">
+            <span v-for="badge in badges(project)" :key="badge.kind" class="cz-badge" :class="`is-${badge.kind}`">{{ badge.label }}</span>
+          </span>
         </span>
         <span class="cz-work__meta cz-mono">
           <span>{{ project.showcase?.principle || project.category?.name }}</span>
