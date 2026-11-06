@@ -69,7 +69,8 @@
   inset: 0;
   z-index: 0;
   background: var(--cz-night-bg);
-  opacity: var(--night);
+  /* 底色比文字更快压暗：过渡期文字仍在淡入时，背景已接近夜色，保证浅字对比度 */
+  opacity: clamp(0, calc(var(--night) * 1.35), 1);
   pointer-events: none;
 }
 .cz-stage { position: fixed; inset: 0; z-index: 1; width: 100vw; height: 100vh; pointer-events: none; }

@@ -4,6 +4,7 @@
  * [POS]: themes/cosmo 的滚动叙事引擎。CosmoHome 调用 useChapters；StarStage 每帧读取 stage。
  *        设计取舍：进度写入 CSS 变量（--p、--in），动画由样式 calc() 驱动；只有演示组件需要离散状态时才读 reactive 的 progress。
  *        窄屏或减少动效时，章节退化为普通文档流：进度恒为 1，夜幕按「夜间章节距视口中心的远近」计算。
+ *        桌面端夜幕与内容同源：入场同相，离场滞后。浅色文字先淡出，底色后亮，避免灰底白字。
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { onBeforeUnmount, onMounted, reactive, type Ref } from 'vue'
@@ -61,7 +62,10 @@ export function useChapters(root: Ref<HTMLElement | null>) {
       if (index === 0) stage.orbit = flow ? clamp(1 - -rect.top / viewport) : smooth(clamp(1 - p * 1.4))
       if (section.dataset.night !== undefined) {
         const centered = 1 - Math.abs(rect.top + rect.height / 2 - viewport / 2) / (rect.height / 2 + viewport * 0.25)
-        night = Math.max(night, flow ? smooth(clamp(centered * 1.6)) : smooth(Math.min(clamp((p + 0.22) / 0.22), clamp((1.12 - p) / 0.22))))
+        // 夜幕与内容同源，但离场滞后：内容先淡出，底色后褪，交接处不留整屏中灰。
+        // 夜间章节的文字是固定浅色；夜幕先退或晚升都会造成「浅字压灰底」。
+        const nightCurve = smooth(Math.min(clamp((p + 0.62) / 0.5), clamp((1.34 - p) / 0.26)))
+        night = Math.max(night, flow ? smooth(clamp(centered * 1.6)) : nightCurve)
       }
     })
     stage.night = night

@@ -11,7 +11,7 @@ export const contentPipeline: WorkSource = {
   slug: 'content-pipeline',
   status: 'published',
   featured: true,
-  order: 4,
+  order: 8,
   category: 'agent',
   origin: 'personal',
   title: '小红书内容创作流水线',

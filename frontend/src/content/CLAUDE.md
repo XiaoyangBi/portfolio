@@ -30,17 +30,18 @@ content.test.ts: 守门测试，校验 slug 唯一、素材存在于 public/、�
 
 ## works/ 成员清单
 
+括号里的数字是 order。公开列表按 order 升序；2–5 固定为 personal-memory → second-brain → obsidian-quick-capture → reading-coach。
 works/index.ts: WORKS 数组，按 order 升序；新增作品必须在此登记
-works/agent-benchmark.ts: personal-agent-benchmark（order 1，精选），首页 02 立标准
-works/insightflow.ts: insightflow（2，简历项目，获奖），首页 01 定问题；技术实现由队友主导
-works/yushengsheng.ts: yushengsheng（3），首页 03 留给人；技术验证版，尚无试用数据
-works/content-pipeline.ts: content-pipeline（4），首页 05 回流
-works/jingzhun.ts: jingzhun（5），电商视觉质检 Demo
-works/memory.ts: personal-memory（6，精选）与 second-brain（7），个人 AI 基建
-works/dsh-plugins.ts: dsh-plugins（8），DeepSeek Harness 插件组
-works/campus.ts: campus-club-match（9，已上线）与 workstation（12，archived）
-works/agents.ts: lvbangpt（10，简历项目，获奖）、morning-brief（11，archived）、reading-coach（13）
-works/tools.ts: kb（14，archived）、resume-pipeline（15，archived）、html-trio（16）、obsidian-quick-capture（17）、model-release-radar（18，archived）
+works/agent-benchmark.ts: personal-agent-benchmark（1，精选），首页 02 立标准
+works/memory.ts: personal-memory（2，精选）与 second-brain（3），个人 AI 基建。两件都有设计理念附注，出处见文件头注释
+works/tools.ts: obsidian-quick-capture（4）、html-trio（13）、kb（16，archived）、resume-pipeline（17，archived）、model-release-radar（18，archived）
+works/agents.ts: reading-coach（5，阅读陪练）、lvbangpt（12，简历项目，获奖）、morning-brief（14，archived）
+works/insightflow.ts: insightflow（6，简历项目，获奖），首页 01 定问题；技术实现由队友主导
+works/yushengsheng.ts: yushengsheng（7），首页 03 留给人；技术验证版，尚无试用数据
+works/content-pipeline.ts: content-pipeline（8），首页 05 回流
+works/jingzhun.ts: jingzhun（9），电商视觉质检 Demo
+works/dsh-plugins.ts: dsh-plugins（10，archived，待打磨后恢复），DeepSeek Harness 插件组
+works/campus.ts: campus-club-match（11，已上线）与 workstation（15，archived）
 works/drafts.ts: g-exo（19）与 finassistant（20），status 为 draft，待本人确认角色后发布
 
 ## 新增一件作品

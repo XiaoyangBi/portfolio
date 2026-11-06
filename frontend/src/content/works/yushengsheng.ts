@@ -12,7 +12,7 @@ export const yushengsheng: WorkSource = {
   slug: 'yushengsheng',
   status: 'published',
   featured: true,
-  order: 3,
+  order: 7,
   category: 'app',
   origin: 'personal',
   title: '羽省省',

@@ -11,7 +11,7 @@ export const jingzhun: WorkSource = {
   slug: 'jingzhun',
   status: 'published',
   featured: true,
-  order: 5,
+  order: 9,
   category: 'app',
   origin: 'personal',
   title: '镜准 JingZhun',

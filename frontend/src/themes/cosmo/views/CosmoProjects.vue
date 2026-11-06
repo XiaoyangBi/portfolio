@@ -30,7 +30,6 @@ const filters = computed(() => {
 })
 const current = computed(() => filters.value.find((item) => item.slug === active.value) || null)
 const shown = computed(() => (active.value ? all.value.filter((item) => item.category?.slug === active.value) : all.value))
-const fromResume = computed(() => all.value.filter((item) => item.showcase?.origin === 'resume').length)
 
 function pick(slug: string) {
   void router.replace({ query: slug && slug !== active.value ? { category: slug } : {} })
@@ -47,9 +46,6 @@ useMeta({
     <header class="cz-doc__head">
       <p class="cz-eyebrow">INDEX · {{ String(all.length).padStart(2, '0') }}</p>
       <h1 class="cz-serif">全部作品</h1>
-      <p class="cz-doc__lead">
-        {{ all.length }} 件作品，其中 {{ fromResume }} 件出自简历。每件都写清问题、决策、我的贡献和证据；团队项目只写我做的部分。
-      </p>
     </header>
 
     <nav v-if="filters.length > 1" class="cz-filters" aria-label="按分类筛选">

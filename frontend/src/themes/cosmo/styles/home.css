@@ -3,6 +3,7 @@
  * [OUTPUT]: 首页分章版式、五个演示组件、结语联系方式栏、作品列表（WorkList）与封面预览样式
  * [POS]: themes/cosmo/styles 的首页层。章节 = 高度 --len vh 的滚动轨道 + 内部 sticky 满屏画框（.cz-pin）。
  *        桌面端各元素绝对定位在画框内；≤760px 或减少动效时退化为普通文档流（见文末）。
+ *        夜间章节的所有内容由 .cz-pin 统一收口可见度，避免搜索框与引文在夜幕褪去后仍全亮。
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 
@@ -120,6 +121,10 @@
 @keyframes cz-pulse { 50% { opacity: 0.25; } }
 
 /* ── 04 有出处：夜间章节 ── */
+/* 整章内容由 pin 统一收口。搜索框、引文、标签行各有内部动画却不跟 --in，
+   若不由 pin 一起淡出，夜幕褪去后它们仍全亮，会出现浅字压灰底。 */
+.cz-ch--evidence .cz-pin { opacity: var(--in, 1); }
+.cz-ch--evidence :is(.cz-copy, .cz-demo) { opacity: 1; }
 .cz-ch--evidence { color: var(--cz-night-ink); }
 .cz-ch--evidence .cz-copy { top: 16vh; top: 16svh; max-width: min(440px, 38vw); }
 .cz-ch--evidence .cz-index, .cz-ch--evidence .cz-copy p { color: rgb(242 242 240 / 50%) !important; }

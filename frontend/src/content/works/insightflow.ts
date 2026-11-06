@@ -11,7 +11,7 @@ export const insightflow: WorkSource = {
   slug: 'insightflow',
   status: 'published',
   featured: true,
-  order: 2,
+  order: 6,
   category: 'agent',
   origin: 'resume',
   title: 'InsightFlow',

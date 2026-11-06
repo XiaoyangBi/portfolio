@@ -9,9 +9,9 @@ import type { WorkSource } from '../schema'
 
 export const dshPlugins: WorkSource = {
   slug: 'dsh-plugins',
-  status: 'published',
+  status: 'archived',
   featured: false,
-  order: 8,
+  order: 10,
   category: 'agent',
   origin: 'personal',
   title: 'DeepSeek Harness 插件组',

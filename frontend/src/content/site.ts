@@ -53,7 +53,7 @@ export const SITE: SiteData = {
     headline: 'AI 产品，先证明它有用。',
     bio: '做 Agent，做评测，也做给自己用的 AI 工具。',
     current_identity: 'AI 产品经理 · 2027 届 · 厦门大学',
-    research_directions: ['Agent 产品', 'AI 评测', 'Human-in-the-Loop', '上下文与记忆'],
+    research_directions: ['Personal agent', 'AI 评测', 'Human-in-the-Loop', '上下文与记忆', '主动性'],
     email: '1531289886@qq.com',
     github_url: 'https://github.com/XiaoyangBi',
     location: '厦门 · 深圳',
@@ -100,7 +100,7 @@ export const PROFILE = {
   ],
   skills: [
     '雅思 6.5，有海外交换经历',
-    '小红书 AI 领域账号，粉丝 1,700+',
+    '小红书 AI 领域账号，粉丝 2000+',
     '能写 PRD，也能用 AI Coding 把 PRD 做成可用的 Demo',
   ],
 }
