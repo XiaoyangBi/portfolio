@@ -86,7 +86,7 @@ export const personalMemory: WorkSource = {
   ],
   stack: ['Markdown + frontmatter', 'Python', 'BM25'],
   tags: ['记忆', '上下文工程', '人在回路', '工具无关'],
-  links: [],
+  links: [{ label: '源码包（脱敏摘录）', url: '/downloads/personal-memory-source.zip' }],
   notes: [
     {
       title: '设计来源：从三层文件到五层两级',
@@ -180,7 +180,7 @@ export const secondBrain: WorkSource = {
   ],
   stack: ['Python', 'faster-whisper', 'yt-dlp', 'macOS Vision', 'Ollama', 'Obsidian'],
   tags: ['知识管理', '本地优先', '可追溯'],
-  links: [],
+  links: [{ label: '源码包（脱敏摘录）', url: '/downloads/second-brain-source.zip' }],
   notes: [
     {
       title: '可追溯是设计前提',

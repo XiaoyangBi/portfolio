@@ -33,7 +33,7 @@ content.test.ts: 守门测试，校验 slug 唯一、素材存在于 public/、�
 括号里的数字是 order。公开列表按 order 升序；2–5 固定为 personal-memory → second-brain → obsidian-quick-capture → reading-coach。
 works/index.ts: WORKS 数组，按 order 升序；新增作品必须在此登记
 works/agent-benchmark.ts: personal-agent-benchmark（1，精选），首页 02 立标准
-works/memory.ts: personal-memory（2，精选）与 second-brain（3），个人 AI 基建。两件都有设计理念附注，出处见文件头注释
+works/memory.ts: personal-memory（2，精选）与 second-brain（3），个人 AI 基建。两件都有设计理念附注（出处见文件头）与脱敏源码包（public/downloads/，只含运行时脚本与工具地图，排除记忆正文、审计数据和测试用例）
 works/tools.ts: obsidian-quick-capture（4）、html-trio（13，links 指向 public/downloads/html-trio.zip）、kb（16，archived）、resume-pipeline（17，archived）、model-release-radar（18，archived）
 works/agents.ts: reading-coach（5，阅读陪练）、lvbangpt（12，简历项目，获奖）、morning-brief（14，archived）
 works/insightflow.ts: insightflow（6，简历项目，获奖），首页 01 定问题；技术实现由队友主导

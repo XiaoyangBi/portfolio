@@ -24,7 +24,7 @@ frontend/src/themes/cosmo/ - 公开端主题：分章滚动首页、作品索引
 frontend/src/api/ - 数据门面：static.ts 读 content，public.ts 按开关选择数据源
 frontend/src/views、layouts、components、styles/ - evidentfolio 原公开端与后台，仅 CMS 模式使用
 frontend/public/works/ - 作品截图，已压缩为 JPG，按作品 slug 分目录
-frontend/public/downloads/ - 可公开下载的源码包；只有内容核对过的项目才放进来，含个人身份或业务数据的项目禁止打包
+frontend/public/downloads/ - 可公开下载的源码包：html-trio 原始 Skill 包、personal-memory 与 second-brain 的脱敏源码摘录。打包前逐个做敏感词复检；含个人身份或业务数据的项目禁止整包放进来
 backend/ - evidentfolio FastAPI 后端，未改动，仅 CMS 模式使用
 deploy/、docs/、scripts/、Dockerfile.* - evidentfolio 原部署工具链，服务 CMS 模式
 </directory>
